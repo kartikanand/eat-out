@@ -1,0 +1,160 @@
+@import 'reset';
+
+$header-color: #CF4647;
+$background-color: #fff;
+
+$link-color: #333;
+$text-color: #524656;
+
+$button-color: #333;
+$button-text-color: #fff;
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    color: $text-color;
+    font-size: 100%;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+}
+
+.wrapper {
+    min-height: 100%;
+    position: relative;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 13px;
+}
+
+h2 {
+    font-size: 1.35rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+header {
+    padding: 5px;
+    padding-top:25px;
+    height: 100px;
+    background-color: $header-color;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.75rem;
+    width: 100%;
+    color: white;
+    margin-bottom: 50px;
+
+    h1 {
+        text-decoration: underline;
+    }
+}
+
+.wrapper {
+    background-color: $background-color;
+}
+
+.hero {
+    height: 125px;
+    padding: 50px;
+    padding-bottom: 25px;
+    text-align: center;
+}
+
+button {
+    border: 3px solid #333;
+    padding: 1em;
+    //border-radius: 0.75em;
+    background-color: $button-color;
+    color: $button-text-color;
+    text-transform: uppercase;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 50px;
+    padding: 10px;
+    line-height: 30px;
+    text-align: center;
+    width: 100%;
+}
+
+p {
+    margin-bottom: 50px;
+}
+
+.res-img {
+    //float: left;
+
+    height: 330px;
+    width: 348px;
+
+    padding: 10px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    margin-bottom: 25px;
+
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 1em;
+        border: 1px solid darken($background-color, 12);
+    }
+}
+
+.res-details {
+    margin-right: auto;
+    margin-left: auto;
+
+    margin-bottom: 30px;
+}
+
+.res-wrapper {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding: 10px;
+}
+
+a {
+    color: $link-color;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+
+    &:hover {
+        color: lighter($link-color);
+        text-decoration: underline;
+    }
+}
+
+li {
+    color: lighten($text-color, 15);
+    display: inline-block;
+    width: 30%;
+    padding: 5px;
+
+    &:first-child {
+        border-right: 1px solid #ccc;
+    }
+    &:last-child {
+        border-left: 1px solid #ccc;   
+    }
+}
