@@ -12,7 +12,6 @@ var RestaurantBox = React.createClass({
             counter: 0
         };
     },
-
     nextRestaurant: function () {
         var counter = this.state.counter;
 
@@ -21,7 +20,6 @@ var RestaurantBox = React.createClass({
             counter: counter + 1
         });
     },
-
     render: function () {
         return React.createElement(
             'div',
@@ -70,7 +68,6 @@ var RestaurantBox = React.createClass({
             )
         );
     }
-
 });
 
 (function (document) {
@@ -83,19 +80,13 @@ var RestaurantBox = React.createClass({
                 var lat = position.coords.latitude;
                 var lon = position.coords.longitude;
 
-                //document.querySelector("#lat span").innerHTML = lat;
-                //document.querySelector("#lon span").innerHTML = lon;
-
                 var url = '/search?lat=' + lat + '&lon=' + lon;
-
-                console.log(url);
 
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', url);
 
                 xhr.onload = function () {
                     if (xhr.status == 200) {
-
                         try {
                             var restaurantArray = JSON.parse(xhr.responseText);
                             console.log(restaurantArray);
@@ -109,7 +100,7 @@ var RestaurantBox = React.createClass({
 
                 xhr.send(null);
             }, function () {
-                document.querySelector('.res-wrapper').innerHTML = "Location services not supported.";
+                document.querySelector('.res-wrapper').innerHTML = "Please allow to get location";
             });
         } else {
             document.querySelector('.res-wrapper').innerHTML = "Location services not supported. Please get a better browser";

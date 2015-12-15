@@ -2,7 +2,6 @@ var React = require('react');
 var ReactDom = require('react-dom');
 
 var RestaurantBox = React.createClass({
-
     getInitialState: function () {
         return {
             // Initialize restaurant to first restaurant in the array
@@ -10,7 +9,6 @@ var RestaurantBox = React.createClass({
             counter: 0
         };
     },
-
     nextRestaurant: function () {
         var counter = this.state.counter;
 
@@ -19,7 +17,6 @@ var RestaurantBox = React.createClass({
             counter: counter+1
         });
     },
-
     render: function () {
         return (
             <div className="res-wrapper">
@@ -41,7 +38,6 @@ var RestaurantBox = React.createClass({
             </div>
         );
     }
-
 });
 
 
@@ -55,19 +51,13 @@ var RestaurantBox = React.createClass({
                 var lat = position.coords.latitude;
                 var lon = position.coords.longitude;
 
-                //document.querySelector("#lat span").innerHTML = lat;
-                //document.querySelector("#lon span").innerHTML = lon;
-
                 var url = '/search?lat='+lat+'&lon='+lon;
-
-                console.log(url);
 
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', url);
 
                 xhr.onload = function () {
                     if (xhr.status == 200) {
-
                         try {
                             var restaurantArray = JSON.parse(xhr.responseText);
                             console.log(restaurantArray);
@@ -79,14 +69,13 @@ var RestaurantBox = React.createClass({
                         } catch (e) {
                             document.querySelector('.res-wrapper').innerHTML = 'Oops! Some Error occurred';
                         }
-                        
                     }
                 }
 
                 xhr.send(null);
 
             }, function () {
-                document.querySelector('.res-wrapper').innerHTML = "Location services not supported."
+                document.querySelector('.res-wrapper').innerHTML = "Please allow to get location"
             });
         } else {
             document.querySelector('.res-wrapper').innerHTML = "Location services not supported. Please get a better browser"
