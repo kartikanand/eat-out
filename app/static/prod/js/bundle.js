@@ -46,37 +46,40 @@ window.onload = function () {
 
             return React.createElement(
                 'div',
-                { className: 'res-wrapper' },
-                React.createElement(
-                    'h3',
-                    null,
-                    React.createElement(
-                        'a',
-                        { href: this.state.restaurant.url },
-                        this.state.restaurant.name
-                    )
-                ),
-                React.createElement('div', { className: 'res-img', style: imgStyle }),
+                null,
                 React.createElement(
                     'div',
-                    { className: 'res-details' },
+                    { className: 'float-wrapper' },
                     React.createElement(
-                        'ul',
+                        'h3',
                         null,
                         React.createElement(
+                            'a',
+                            { href: this.state.restaurant.url },
+                            this.state.restaurant.name
+                        )
+                    ),
+                    React.createElement('div', { className: 'res-img', style: imgStyle }),
+                    React.createElement(
+                        'ul',
+                        { className: 'res-details' },
+                        React.createElement(
                             'li',
                             null,
-                            'Rating: 3'
+                            'Rating: ',
+                            this.state.restaurant.user_rating.aggregate_rating
                         ),
                         React.createElement(
                             'li',
                             null,
-                            'Chinese, Finger Food'
+                            this.state.restaurant.cuisines
                         ),
                         React.createElement(
                             'li',
                             null,
-                            '1200/-'
+                            'Average cost for 2 - Rs ',
+                            this.state.restaurant.average_cost_for_two,
+                            '/-'
                         )
                     )
                 ),

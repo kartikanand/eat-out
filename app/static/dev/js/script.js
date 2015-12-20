@@ -36,17 +36,16 @@ window.onload = function () {
             }
 
             return (
-                <div className="res-wrapper">
-                    <h3><a href={this.state.restaurant.url}>{this.state.restaurant.name}</a></h3>
+                <div>
+                    <div className="float-wrapper">
+                        <h3><a href={this.state.restaurant.url}>{this.state.restaurant.name}</a></h3>
+                        <div className="res-img" style={imgStyle}>
+                        </div>
 
-                    <div className="res-img" style={imgStyle}>
-                    </div>
-
-                    <div className="res-details">
-                        <ul>
-                            <li>Rating: 3</li>
-                            <li>Chinese, Finger Food</li>
-                            <li>1200/-</li>
+                        <ul className="res-details">
+                            <li>Rating: {this.state.restaurant.user_rating.aggregate_rating}</li>
+                            <li>{this.state.restaurant.cuisines}</li>
+                            <li>Average cost for 2 - Rs {this.state.restaurant.average_cost_for_two}/-</li>
                         </ul>
                     </div>
 

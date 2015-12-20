@@ -89,7 +89,7 @@ h2 {
 
 h3 {
   font-size: 1.15rem;
-  margin-bottom: 9px; }
+  margin-bottom: 13px; }
 
 header {
   padding: 5px;
@@ -105,19 +105,6 @@ header {
 
 .wrapper {
   background-color: #fff; }
-
-.hero {
-  height: 125px;
-  padding: 50px;
-  padding-bottom: 25px;
-  text-align: center; }
-
-.res-wrapper {
-  width: 75%;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  padding: 10px; }
 
 #error {
   width: 50%;
@@ -146,37 +133,46 @@ footer {
   width: 100%; }
 
 .res-img {
+  margin: 15px;
+  float: left;
   height: 250px;
   width: 250px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 25px;
-  margin-bottom: 25px;
   border-radius: 100%;
   background-position: 50% 50%; }
 
 .res-details {
+  margin: 15px;
+  float: right;
+  height: 250px;
+  width: 250px;
+  padding-top: 75px;
+  text-align: left;
+  list-style: circle; }
+  .res-details li {
+    color: #7a6880;
+    padding-bottom: 5px;
+    line-height: 20px; }
+
+.res-wrapper {
+  text-align: center;
+  padding: 10px; }
+  .res-wrapper a {
+    color: #333;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold; }
+    .res-wrapper a:hover {
+      color: lighter(#333);
+      text-decoration: underline; }
+
+.float-wrapper {
+  width: 75%;
   margin-right: auto;
-  margin-left: auto;
-  margin-bottom: 30px; }
+  margin-left: auto; }
 
-.res-wrapper a {
-  color: #333;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-weight: bold; }
-  .res-wrapper a:hover {
-    color: lighter(#333);
-    text-decoration: underline; }
-
-li {
-  color: #7a6880;
-  display: inline-block;
-  width: 30%;
-  padding: 5px; }
-  li:first-child {
-    border-right: 1px solid #ccc; }
-  li:last-child {
-    border-left: 1px solid #ccc; }
+.float-wrapper::after {
+  clear: both;
+  content: "";
+  display: block; }
 
 /*# sourceMappingURL=styles.css.map */

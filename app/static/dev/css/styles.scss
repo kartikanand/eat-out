@@ -80,7 +80,7 @@ h2 {
 
 h3 {
     font-size: 1.15rem;
-    margin-bottom: 9px;
+    margin-bottom: 13px;
 }
 
 header {
@@ -100,21 +100,6 @@ header {
 
 .wrapper {
     background-color: $background-color;
-}
-
-.hero {
-    height: 125px;
-    padding: 50px;
-    padding-bottom: 25px;
-    text-align: center;
-}
-
-.res-wrapper {
-    width: 75%;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    padding: 10px;
 }
 
 #error {
@@ -150,14 +135,11 @@ footer {
 }
 
 .res-img {
+    margin: 15px;
+    float: left;
+
     height: 250px;
     width: 250px;
-
-    margin-left: auto;
-    margin-right: auto;
-
-    margin-top: 25px;
-    margin-bottom: 25px;
 
     border-radius: 100%;
 
@@ -165,13 +147,29 @@ footer {
 }
 
 .res-details {
-    margin-right: auto;
-    margin-left: auto;
+    margin: 15px;
+    float: right;
 
-    margin-bottom: 30px;
+    height: 250px;
+    width: 250px;
+
+    padding-top: 75px;
+
+    text-align: left;
+
+    list-style: circle;
+
+
+    li {
+        color: lighten($text-color, 15);
+        padding-bottom: 5px;
+        line-height: 20px;
+    }
 }
 
 .res-wrapper {
+    text-align: center;
+    padding: 10px;
 
     a {
         color: $link-color;
@@ -184,20 +182,16 @@ footer {
             text-decoration: underline;
         }
     }
-
 }
 
+.float-wrapper {
+    width: 75%;
+    margin-right: auto;
+    margin-left: auto;
+}
 
-li {
-    color: lighten($text-color, 15);
-    display: inline-block;
-    width: 30%;
-    padding: 5px;
-
-    &:first-child {
-        border-right: 1px solid #ccc;
-    }
-    &:last-child {
-        border-left: 1px solid #ccc;   
-    }
+.float-wrapper::after {
+    clear: both;
+    content: "";
+    display: block;
 }

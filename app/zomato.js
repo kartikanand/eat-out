@@ -112,7 +112,7 @@ module.exports.getNearbyRestaurants = function (latitude, longitude, start) {
         'url', 
         'location', 
         'average_cost_for_two', 
-        'currency', 
+        'cuisines', 
         'user_rating', 
         'is_delivering_now', 
         'cafe', 
