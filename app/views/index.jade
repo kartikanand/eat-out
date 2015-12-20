@@ -7,27 +7,22 @@ html
         
         title Eat Out
 
-        link(href='http://fonts.googleapis.com/css?family=Quicksand:400,700', rel='stylesheet', type='text/css')
-        link(rel="stylesheet", type="text/css", href="static/prod/css/styles.css")
+        link(href='http://fonts.googleapis.com/css?family=Quicksand:400,700', rel='stylesheet')
+        link(href="static/prod/css/styles.css", rel="stylesheet")
     body
 
+        // wrapper for sticky footer at the bottom
         .wrapper
             header
-                h1 Eat out!
+                h1: a(href="/") Eat out!
                 h2 Find random places to eat around you!
+
+            // this wrapper will be replaced by restaurants
             section.res-wrapper
-                h3: a(href="#") Restaurant Name!
+                button(type="submit") Locate Me!
 
-                .res-img
-                    img(src="https://d.zmtcdn.com/data/pictures/chains/9/1129/0e0f9d647f72e9ddc7237e900b479800_featured_v2.jpg")
-
-                .res-details
-                    ul
-                        li Rating: 3
-                        li Chinese, Finger Food
-                        li 1200/-
-
-                button(type="submit") Random!
+            // this is for location or request errors
+            #error
 
             footer Made with &hearts; in दिल्ली
 

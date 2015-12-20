@@ -92,12 +92,7 @@ module.exports.filterRestaurants = function (jsonData, responseParams) {
 
     Optional:
 */
-module.exports.getNearbyRestaurants = function (latitude, longitude) {
-    // Empty latitude and longitude not expected by zomato api
-    if (!latitude || !longitude) {
-        q.reject(new Error('empty latitude and longitude'));
-    }
-
+module.exports.getNearbyRestaurants = function (latitude, longitude, start) {
     // since we'll be calling functions inside promise(callbacks)
     // save this for later
     var self = this;
@@ -105,7 +100,8 @@ module.exports.getNearbyRestaurants = function (latitude, longitude) {
     var requestParams = {
         lat: latitude,
         lon: longitude,
-        count: 10
+        count: 10,
+        start: start
     };
 
     // Zomato returns a lot of data for each restaurant
@@ -121,7 +117,7 @@ module.exports.getNearbyRestaurants = function (latitude, longitude) {
         'is_delivering_now', 
         'cafe', 
         'phone_numbers',
-        'thumb'
+        'featured_image'
     ];
 
     return self.searchRestaurantsOnZomato(requestParams)

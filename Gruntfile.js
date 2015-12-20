@@ -49,13 +49,15 @@ module.exports = function (grunt) {
                     });
 
                     nodemon.on('config:update', function () {
+                        setTimeout(function () {
                             require('open')('http://localhost:2000');
+                        }, 2000);
                     });
 
                     nodemon.on('restart', function () {
                         setTimeout(function () {
                             require('fs').writeFileSync('.reboot', 'reboot');
-                        }, 1000);
+                        }, 7000);
                     });
                 }
             },

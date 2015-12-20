@@ -19,12 +19,53 @@ body {
     color: $text-color;
     font-size: 100%;
     font-family: 'Quicksand', sans-serif;
-    font-weight: 700;
 }
 
 .wrapper {
     min-height: 100%;
     position: relative;
+    padding-bottom: 75px;
+
+    &::before {
+        display: block;
+        content: "";
+    }
+
+    &.progress-start {
+        &::before {
+            animation-duration: 1s;
+            animation-name: progress-start-anim;
+            animation-timing-function: ease-in-out;
+            animation-fill-mode: forwards;
+            border-bottom: 2px solid #333;
+        }
+    }
+
+    &.progress-end {
+        &::before {
+            animation-duration: 1s;
+            animation-name: progress-end-anim;
+            animation-timing-function: ease-out;
+            animation-fill-mode: forwards;
+        }
+    }
+}
+
+@keyframes progress-start-anim {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 70%;
+    }
+}
+
+@keyframes progress-end-anim {
+    100% {
+        width: 100%;
+        border-bottom: none;
+    }
 }
 
 h1 {
@@ -34,28 +75,27 @@ h1 {
 
 h2 {
     font-size: 1.35rem;
+    margin-bottom: 11px;
 }
 
 h3 {
-    font-size: 1.25rem;
-    margin-bottom: 10px;
+    font-size: 1.15rem;
+    margin-bottom: 9px;
 }
 
 header {
     padding: 5px;
-    padding-top:25px;
-    height: 100px;
-    background-color: $header-color;
+    height: 150px;
     text-align: center;
-    font-weight: 700;
-    font-size: 1.75rem;
     width: 100%;
-    color: white;
-    margin-bottom: 50px;
-
-    h1 {
+    a {
+        color: $text-color;
         text-decoration: underline;
+            outline: 0 !important;
     }
+
+    padding-top:50px;
+    padding-bottom: 50px;
 }
 
 .wrapper {
@@ -69,16 +109,32 @@ header {
     text-align: center;
 }
 
+.res-wrapper {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding: 10px;
+}
+
+#error {
+    width: 50%;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
 button {
-    border: 3px solid #333;
+    border: none;
     padding: 1em;
-    //border-radius: 0.75em;
     background-color: $button-color;
     color: $button-text-color;
     text-transform: uppercase;
+    outline: 0 !important;
 
     &:hover {
         cursor: pointer;
+        background-color: lighten($button-color, 7);
     }
 }
 
@@ -93,29 +149,19 @@ footer {
     width: 100%;
 }
 
-p {
-    margin-bottom: 50px;
-}
-
 .res-img {
-    //float: left;
-
-    height: 330px;
-    width: 348px;
-
-    padding: 10px;
+    height: 250px;
+    width: 250px;
 
     margin-left: auto;
     margin-right: auto;
 
+    margin-top: 25px;
     margin-bottom: 25px;
 
-    img {
-        width: 100%;
-        height: 100%;
-        border-radius: 1em;
-        border: 1px solid darken($background-color, 12);
-    }
+    border-radius: 100%;
+
+    background-position: 50% 50%;
 }
 
 .res-details {
@@ -126,24 +172,21 @@ p {
 }
 
 .res-wrapper {
-    width: 75%;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    padding: 10px;
-}
 
-a {
-    color: $link-color;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-weight: bold;
+    a {
+        color: $link-color;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-weight: bold;
 
-    &:hover {
-        color: lighter($link-color);
-        text-decoration: underline;
+        &:hover {
+            color: lighter($link-color);
+            text-decoration: underline;
+        }
     }
+
 }
+
 
 li {
     color: lighten($text-color, 15);

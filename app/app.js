@@ -25,10 +25,14 @@ app.get('/', function (req, res) {
 app.get('/search', function (req, res) {
     var latitude = req.query.lat;
     var longitude = req.query.lon;
+    var start = req.query.start;
+
+    // start from 0
+    // if request comes again, then start from that value
+    if (!start) start = 0;
 
     // Clients should not send empty latitude and/or longitude
     if (!latitude || !longitude) {
-        console.log('inside here');
         res.sendStatus(400).send('');
     }
 
