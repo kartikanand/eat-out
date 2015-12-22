@@ -8,22 +8,22 @@ html
         title Eat Out
 
         link(href='http://fonts.googleapis.com/css?family=Quicksand:400,700', rel='stylesheet')
-        link(href="static/prod/css/styles.css", rel="stylesheet")
+        link(href="public/css/styles.min.css", rel="stylesheet")
     body
 
         // wrapper for sticky footer at the bottom
         .wrapper
-            header
+            header.center-text
                 h1: a(href="/") Eat out!
                 h2 Find random places to eat around you!
 
             // this wrapper will be replaced by restaurants
-            section.res-wrapper
+            section.react-root.center-text
                 button(type="submit") Locate Me!
 
             // this is for location or request errors
-            #error
+            .error
 
-            footer Made with &hearts; in दिल्ली
+            footer.center-text Made with &hearts; in दिल्ली
 
-        script(type="text/javascript", src="static/prod/js/bundle.js")
+        script(type="text/javascript", src="public/js/bundle.min.js")

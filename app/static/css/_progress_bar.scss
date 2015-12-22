@@ -1,0 +1,35 @@
+.progress-start {
+    &::before {
+        animation-duration: 1s;
+        animation-name: progress-start-anim;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+        border-bottom: 2px solid #333;
+    }
+}
+
+.progress-end {
+    &::before {
+        animation-duration: 1s;
+        animation-name: progress-end-anim;
+        animation-timing-function: ease-out;
+        animation-fill-mode: forwards;
+    }
+}
+
+@keyframes progress-start-anim {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 70%;
+    }
+}
+
+@keyframes progress-end-anim {
+    100% {
+        width: 100%;
+        border-bottom: none;
+    }
+}

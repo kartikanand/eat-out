@@ -9,15 +9,28 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    'app/static/prod/js/bundle.js': 'app/static/dev/js/script.js'
+                    'app/static/js/bundle.js': 'app/static/js/script.js'
                 }
             }
         },
         sass: {
             dist: {
                 files: {
-                    'app/static/prod/css/styles.css': 'app/static/dev/css/styles.scss'
+                    'app/static/css/styles.css': 'app/static/css/styles.scss'
                 }                
+            }
+        },
+        cssmin: {
+            css: {
+                src: 'app/static/css/styles.css',
+                dest: 'app/public/css/styles.min.css'
+            }
+        },
+        uglify: {
+            js: {
+                files: {
+                    'app/public/js/bundle.min.js': ['app/static/js/bundle.js']
+                }    
             }
         },
         watch: {
@@ -29,11 +42,11 @@ module.exports = function (grunt) {
                 tasks: [],
             },
             css: {
-                files: ['app/static/dev/css/styles.scss'],
+                files: ['app/static/css/*.scss'],
                 tasks: ['sass']
             },
             js: {
-                files: ['app/static/dev/js/script.js'],
+                files: ['app/static/js/script.js'],
                 tasks: ['browserify']
             },
             server: {
@@ -67,11 +80,18 @@ module.exports = function (grunt) {
                 ignore: ['app/static', 'app/views']
             }
         },
-        concurrent: {       
+        concurrent: {
             target: {
                 tasks: ['watch', 'nodemon'],
                 options: {
                     logConcurrentOutput: true
+                }
+            }
+        },
+        mkdir: {
+            prod: {
+                options: {
+                    create: ['app/public']
                 }
             }
         }
@@ -82,6 +102,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-nodemon');
     grunt.loadNpmTasks('grunt-concurrent');
+    grunt.loadNpmTasks('grunt-mkdir');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
 
     grunt.registerTask('default', ['concurrent']);
+
+    grunt.registerTask('build', ['sass', 'browserify', 'mkdir', 'cssmin', 'uglify']);
 };

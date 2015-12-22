@@ -1,0 +1,53 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    color: $text-color;
+    font-size: 100%;
+    font-family: 'Quicksand', sans-serif;
+    background-color: $background-color;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 13px;
+}
+
+h2 {
+    font-size: 1.35rem;
+    margin-bottom: 11px;
+}
+
+h3 {
+    font-size: 1.15rem;
+    margin-bottom: 33px;
+}
+
+a {
+    color: $link-color;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+
+    &:hover {
+        color: lighter($link-color);
+        text-decoration: underline;
+    }
+}
+
+button {
+    border: none;
+    padding: 1em;
+    background-color: $button-color;
+    color: $button-text-color;
+    text-transform: uppercase;
+    outline: 0 !important;
+
+    &:hover {
+        cursor: pointer;
+        background-color: lighten($button-color, 7);
+    }
+}

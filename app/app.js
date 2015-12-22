@@ -10,7 +10,7 @@ var express = require('express'),
     zomato = require('./zomato.js');
  
 // Static files
-app.use('/static', express.static(__dirname+'/static'));
+app.use('/public', express.static(__dirname+'/public'));
 
 // Jade configuration
 app.set('view engine', 'jade');

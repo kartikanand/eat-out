@@ -24,23 +24,25 @@ window.onload = function () {
 
         },
         render: function () {
+            var showRandomButton = true;
+            if (this.state.counter == 9) {
+                showRandomButton = false;
+            }
+
             var imgStyle = {
                 backgroundImage: 'url('+this.state.restaurant.featured_image+')'
             };
 
-            var moreButton;
-            if (false) {
-                moreButton = <button onClick={this.moreRestaurants}>More!</button>
-            } else {
-                moreButton = <button onClick={this.nextRestaurant}>Random!</button>
-            }
+            var randomButton = null;
+            if (showRandomButton) {
+                randomButton = <button onClick={this.nextRestaurant}>Random</button>
+            }                
 
             return (
-                <div>
-                    <div className="float-wrapper">
+                <div className="res-wrapper">
+                    <div className="float-wrapper center-text">
                         <h3><a href={this.state.restaurant.url}>{this.state.restaurant.name}</a></h3>
-                        <div className="res-img" style={imgStyle}>
-                        </div>
+                        <div className="res-img" style={imgStyle}></div>
 
                         <ul className="res-details">
                             <li>Rating: {this.state.restaurant.user_rating.aggregate_rating}</li>
@@ -49,7 +51,7 @@ window.onload = function () {
                         </ul>
                     </div>
 
-                    {moreButton}
+                    {randomButton}
                 </div>
             );
         }
@@ -76,7 +78,7 @@ window.onload = function () {
     };
 
     var renderError = function (err) {
-        document.querySelector('#error').innerHTML = err;
+        document.querySelector('.error').innerHTML = err;
     };
 
     var renderRestaurants = function (jsonResponse) {
@@ -85,7 +87,7 @@ window.onload = function () {
 
             ReactDom.render(
                 <RestaurantBox restaurantArray={restaurantArray} />
-                ,document.querySelector(".res-wrapper")
+                ,document.querySelector(".react-root")
             );
         } catch (e) {
             throw new Error('parse error');
@@ -140,8 +142,9 @@ window.onload = function () {
         return defer.promise;
     };
 
-    document.querySelector(".res-wrapper button").addEventListener('click', function (event) {
+    document.querySelector(".react-root button").addEventListener('click', function (event) {
         event.preventDefault();
+        
         startProgressbar();
 
         getLocation()
@@ -152,12 +155,11 @@ window.onload = function () {
             return renderRestaurants(jsonResponse);
         })
         .catch(function (err) {
-            console.log(err);
-            renderError(err.message);
-            renderError(err.stack);
+            renderError('Oops! We messed up. Please try again.');
+        })
+        .finally(function () {
+            endProgressbar();
         });
-
-        endProgressbar();
     });
 
 };
