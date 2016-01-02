@@ -60,8 +60,10 @@ app.get('/search', function (req, res) {
     });
 });
 
-// Listen on port 2000
-var server = app.listen(2000, function () {
+var port = process.env.PORT || 8080;
+
+// Listen on port set by Heroku/8080
+var server = app.listen(port, function () {
     var host = server.address().address;
     var port = server.address().port;
 

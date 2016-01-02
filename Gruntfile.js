@@ -1,4 +1,7 @@
 module.exports = function (grunt) {
+
+    require('load-grunt-tasks')(grunt);
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         appDir: 'app/',
@@ -16,9 +19,12 @@ module.exports = function (grunt) {
         },
         browserify: {
             options: {
-                transform: [['babelify', {
+                transform: [
+                    ['babelify', {
                     presets: ['babel-preset-react']
-                }], ['envify']]
+                    }],
+                    ['envify']
+                ]
             },
             dist: {
                 files: {
@@ -119,17 +125,6 @@ module.exports = function (grunt) {
             dev: ['<%= devDir %>']
         }
     });
-
-    grunt.loadNpmTasks('grunt-contrib-sass');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-browserify');
-    grunt.loadNpmTasks('grunt-nodemon');
-    grunt.loadNpmTasks('grunt-concurrent');
-    grunt.loadNpmTasks('grunt-mkdir');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-env');
 
     grunt.registerTask('default', ['env:dev', 'sass', 'browserify', 'mkdir:dev', 'concurrent']);
     grunt.registerTask('build', ['env:prod', 'sass', 'browserify', 'mkdir:prod', 'cssmin', 'uglify']);
