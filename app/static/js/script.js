@@ -1,10 +1,12 @@
 window.onload = function () {
-    
+
     var React = require('react');
     var ReactDom = require('react-dom');
     var q = require('q');
 
+    // This is a react component responsible for displaying restaurant details
     var RestaurantBox = React.createClass({
+        // Called at the beginning of react render
         getInitialState: function () {
             return {
                 // Initialize restaurant to first restaurant in the array
@@ -12,6 +14,7 @@ window.onload = function () {
                 counter: 0
             };
         },
+        // get the next restaurant in array
         nextRestaurant: function () {
             var counter = this.state.counter;
 
@@ -21,22 +24,20 @@ window.onload = function () {
             });
         },
         moreRestaurants: function () {
-
+            // will implement this later
         },
         render: function () {
-            var showRandomButton = true;
+            // since the server is sending 10 restaurants at a time.
+            // disable the random button at the last restaurant
+            var randomButton = <button onClick={this.nextRestaurant}>Random</button>;
             if (this.state.counter == 9) {
-                showRandomButton = false;
+                randomButton = null;
             }
 
+            // for restaurant photo
             var imgStyle = {
                 backgroundImage: 'url('+this.state.restaurant.featured_image+')'
             };
-
-            var randomButton = null;
-            if (showRandomButton) {
-                randomButton = <button onClick={this.nextRestaurant}>Random</button>
-            }                
 
             return (
                 <div className="res-wrapper">
@@ -57,30 +58,7 @@ window.onload = function () {
         }
     });
 
-    var startProgressbar = function () {
-        var wrapper = document.querySelector(".wrapper");
-        wrapper.className = wrapper.className + " progress-start";
-    };
-
-    var endProgressbar = function () {
-        // This timeout is waiting for the first animation to end
-        setTimeout(function () {
-            var wrapper = document.querySelector(".wrapper");
-
-            // When the second animation ends, remove the classes
-            wrapper.addEventListener('animationend', function (event) {
-                wrapper.className = wrapper.className.replace('progress-start', '');
-                wrapper.className = wrapper.className.replace('progress-end', '');
-            });
-            wrapper.className = wrapper.className + " progress-end";
-
-        }, 1000);
-    };
-
-    var renderError = function (err) {
-        document.querySelector('.error').innerHTML = err;
-    };
-
+    // top utility which calls the react render function with received data
     var renderRestaurants = function (jsonResponse) {
         try {
             var restaurantArray = JSON.parse(jsonResponse);
@@ -94,11 +72,15 @@ window.onload = function () {
         }
     };
 
+    // responsible for making request to server with passed options
+    // returns a promise
     var makeRequestToServer = function (options) {
+        // no point in continuing with null options
         if (!options) {
             q.reject(new Error());
         }
 
+        // do an ajax request to server
         var url = '/search?lat='+options.lat+'&lon='+options.lon+'&start='+options.start;
 
         var xhr = new XMLHttpRequest();
@@ -117,6 +99,8 @@ window.onload = function () {
         return defer.promise;
     };
 
+    // responsible for getting the current location
+    // return a promise
     var getLocation = function () {
         var defer = q.defer();
 
@@ -142,6 +126,35 @@ window.onload = function () {
         return defer.promise;
     };
 
+    // responsible for starting the progress bar when user makes a request
+    var startProgressbar = function () {
+        var wrapper = document.querySelector(".wrapper");
+        wrapper.className = wrapper.className + " progress-start";
+    };
+
+    // responsible for ending the progress bar after server request is received and first restaurant rendered
+    var endProgressbar = function () {
+        // This timeout is waiting for the first animation to end
+        setTimeout(function () {
+            var wrapper = document.querySelector(".wrapper");
+
+            // When the second animation ends, remove the classes
+            wrapper.addEventListener('animationend', function (event) {
+                wrapper.className = wrapper.className.replace('progress-start', '');
+                wrapper.className = wrapper.className.replace('progress-end', '');
+            });
+            wrapper.className = wrapper.className + " progress-end";
+
+        }, 1000);
+    };
+
+    // responsible for displaying any request error
+    var renderError = function (err) {
+        document.querySelector('.error').innerHTML = err;
+    };
+
+    // adds a event handler to main button present on index page
+    // this funtion is responsible for doing everything
     document.querySelector(".react-root button").addEventListener('click', function (event) {
         event.preventDefault();
         

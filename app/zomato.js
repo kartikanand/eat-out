@@ -57,13 +57,14 @@ module.exports.filterRestaurants = function (jsonData, responseParams) {
     if (!('restaurants' in jsonData)) {
         throw new Error('restaurants not in jsonData');
     }
+
     var restaurantArray = jsonData.restaurants,
         resultArray = [];
 
     // each element of array is a dict
     restaurantArray.forEach(function (dict) {
         
-        // each dict is expected to contain a restaurant
+        // each dict is expected to contain a restaurant object
         if (!('restaurant' in dict)) {
             throw new Error('restaurant not in jsonData');
         }
