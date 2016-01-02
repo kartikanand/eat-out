@@ -107,24 +107,12 @@ module.exports = function (grunt) {
                 }
             }
         },
-        mkdir: {
-            dev: {
-                options: {
-                    create: ['<%= devDir %>']
-                }
-            },
-            prod: {
-                options: {
-                    create: ['<%= prodDir %>']
-                }
-            }
-        },
         clean: {
             prod: ['<%= prodDir %>'],
             dev: ['<%= devDir %>']
         }
     });
 
-    grunt.registerTask('default', ['env:dev', 'sass', 'browserify', 'mkdir:dev', 'concurrent']);
-    grunt.registerTask('build', ['env:prod', 'sass', 'browserify', 'mkdir:prod', 'cssmin', 'uglify']);
+    grunt.registerTask('default', ['env:dev', 'sass', 'browserify', 'concurrent']);
+    grunt.registerTask('build', ['env:prod', 'sass', 'browserify', 'cssmin', 'uglify']);
 };
