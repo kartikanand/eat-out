@@ -120,7 +120,6 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            all: ['<%= devDir %>', '<%= prodDir %>'],
             prod: ['<%= prodDir %>'],
             dev: ['<%= devDir %>']
         }
