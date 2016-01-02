@@ -3,3 +3,4 @@ node_modules/
 .sass-cache/
 .key_env
 app/public
+app/dev

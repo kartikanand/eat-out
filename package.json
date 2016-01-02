@@ -2,9 +2,13 @@
   "name": "eat-out",
   "version": "1.0.0",
   "description": "Find random places to eat around you",
-  "main": "index.js",
+  "main": "app/app.js",
   "scripts": {
+    "start": "node app/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "0.12.7"
   },
   "keywords": [
     "eat out",
@@ -29,10 +33,13 @@
     "grunt-babel": "^6.0.0",
     "grunt-browserify": "^4.0.1",
     "grunt-concurrent": "^2.1.0",
+    "grunt-contrib-clean": "^0.7.0",
     "grunt-contrib-cssmin": "^0.14.0",
     "grunt-contrib-sass": "^0.9.2",
     "grunt-contrib-uglify": "^0.11.0",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-env": "^0.4.4",
+    "grunt-envify": "0.0.2",
     "grunt-mkdir": "^0.1.2",
     "grunt-nodemon": "^0.4.1",
     "mocha": "^2.3.4",

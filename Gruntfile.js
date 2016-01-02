@@ -1,35 +1,48 @@
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        appDir: 'app/',
+        viewsDir: '<%= appDir %>views/',
+        staticDir: '<%= appDir %>static/',
+        devDir: '<%= appDir %>dev/',
+        prodDir: '<%= appDir %>public/',
+        env: {
+            dev: {
+                NODE_ENV: 'development'
+            },
+            prod: {
+                NODE_ENV: 'production'
+            }
+        },
         browserify: {
             options: {
                 transform: [['babelify', {
                     presets: ['babel-preset-react']
-                }]]
+                }], ['envify']]
             },
             dist: {
                 files: {
-                    'app/static/js/bundle.js': 'app/static/js/script.js'
+                    '<%= devDir %>js/bundle.js': '<%= staticDir %>/js/script.js'
                 }
-            }
+            },
         },
         sass: {
             dist: {
                 files: {
-                    'app/static/css/styles.css': 'app/static/css/styles.scss'
+                    '<%= devDir %>css/styles.css': '<%= staticDir %>css/styles.scss'
                 }                
             }
         },
         cssmin: {
             css: {
-                src: 'app/static/css/styles.css',
-                dest: 'app/public/css/styles.min.css'
+                src: '<%= devDir %>css/styles.css',
+                dest: '<%= prodDir %>css/styles.min.css'
             }
         },
         uglify: {
             js: {
                 files: {
-                    'app/public/js/bundle.min.js': ['app/static/js/bundle.js']
+                    '<%= prodDir %>js/bundle.min.js': ['<%= devDir %>js/bundle.js']
                 }    
             }
         },
@@ -38,15 +51,15 @@ module.exports = function (grunt) {
                 livereload: true,
             },
             src: {
-                files: ['app/views/index.jade'],
+                files: ['<%= viewsDir %>index.jade'],
                 tasks: [],
             },
             css: {
-                files: ['app/static/css/*.scss'],
+                files: ['<%= staticDir %>css/*.scss'],
                 tasks: ['sass']
             },
             js: {
-                files: ['app/static/js/script.js'],
+                files: ['<%= staticDir %>js/script.js'],
                 tasks: ['browserify']
             },
             server: {
@@ -75,9 +88,9 @@ module.exports = function (grunt) {
                 }
             },
             des: {
-                script: 'app/app.js',
-                watch: ['app'],
-                ignore: ['app/static', 'app/views']
+                script: '<%= pkg.main %>',
+                watch: ['<%= appDir %>'],
+                ignore: ['<%= staticDir %>', '<%= viewsDir %>', '<%= prodDir %>', '<%= devDir %>']
             }
         },
         concurrent: {
@@ -89,11 +102,21 @@ module.exports = function (grunt) {
             }
         },
         mkdir: {
+            dev: {
+                options: {
+                    create: ['<%= devDir %>']
+                }
+            },
             prod: {
                 options: {
-                    create: ['app/public']
+                    create: ['<%= prodDir %>']
                 }
             }
+        },
+        clean: {
+            all: ['<%= devDir %>', '<%= prodDir %>'],
+            prod: ['<%= prodDir %>'],
+            dev: ['<%= devDir %>']
         }
     });
 
@@ -105,8 +128,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-mkdir');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-env');
 
-    grunt.registerTask('default', ['concurrent']);
-
-    grunt.registerTask('build', ['sass', 'browserify', 'mkdir', 'cssmin', 'uglify']);
+    grunt.registerTask('default', ['env:dev', 'sass', 'browserify', 'mkdir:dev', 'concurrent']);
+    grunt.registerTask('build', ['env:prod', 'sass', 'browserify', 'mkdir:prod', 'cssmin', 'uglify']);
 };

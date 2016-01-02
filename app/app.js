@@ -8,9 +8,16 @@ if (!process.env.ZOMATO_KEY) {
 var express = require('express'),
     app = express(),
     zomato = require('./zomato.js');
- 
-// Static files
-app.use('/public', express.static(__dirname+'/public'));
+
+app.locals.development = process.env.NODE_ENV != 'production';
+
+// Static files configuration
+var staticFilesPath = __dirname+'/dev';
+if (!app.locals.development) {
+    // to use non-minified css and js files
+    staticFilesPath = __dirname+'/public';
+}
+app.use('/static', express.static(staticFilesPath));
 
 // Jade configuration
 app.set('view engine', 'jade');

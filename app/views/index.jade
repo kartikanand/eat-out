@@ -8,7 +8,11 @@ html
         title Eat Out
 
         link(href='http://fonts.googleapis.com/css?family=Quicksand:400,700', rel='stylesheet')
-        link(href="public/css/styles.min.css", rel="stylesheet")
+
+        if development
+            link(href="static/css/styles.css", rel="stylesheet")
+        else
+            link(href="static/css/styles.min.css", rel="stylesheet")
     body
 
         // wrapper for sticky footer at the bottom
@@ -26,4 +30,7 @@ html
 
             footer.center-text Made with &hearts; in दिल्ली
 
-        script(type="text/javascript", src="public/js/bundle.min.js")
+        if development
+            script(type="text/javascript", src="static/js/bundle.js")
+        else
+            script(type="text/javascript", src="static/js/bundle.min.js")
