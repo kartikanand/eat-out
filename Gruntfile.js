@@ -20,15 +20,17 @@ module.exports = function (grunt) {
         browserify: {
             options: {
                 transform: [
-                    ['babelify', {
-                    presets: ['babel-preset-react']
-                    }],
+                    [
+                        'babelify', {
+                            presets: ['babel-preset-es2015', 'babel-preset-react']
+                        }
+                    ],
                     ['envify']
                 ]
             },
             dist: {
                 files: {
-                    '<%= devDir %>js/bundle.js': '<%= staticDir %>/js/script.js'
+                    '<%= devDir %>js/bundle.js': '<%= staticDir %>/js/script.es6'
                 }
             },
         },
@@ -65,7 +67,9 @@ module.exports = function (grunt) {
                 tasks: ['sass']
             },
             js: {
-                files: ['<%= staticDir %>js/script.js'],
+                files: [
+                    '<%= staticDir %>js/**/*',
+                ],
                 tasks: ['browserify']
             },
             server: {
@@ -82,7 +86,7 @@ module.exports = function (grunt) {
 
                     nodemon.on('config:update', function () {
                         setTimeout(function () {
-                            require('open')('http://localhost:2000');
+                            require('open')('http://localhost:8080');
                         }, 2000);
                     });
 
