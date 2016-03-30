@@ -14,20 +14,10 @@ html
         else
             link(href="static/css/styles.min.css", rel="stylesheet")
     body
-
         // wrapper for sticky footer at the bottom
         .wrapper
-            header.center-text
-                h1: a(href="/") Eat out!
-                h2 Find random places to eat around you!
-
             // this wrapper will be replaced by restaurants
-            section#react-root.center-text
-
-            // this is for location or request errors
-            .error
-
-            footer.center-text Made with &hearts; in दिल्ली
+            section#react-root
 
         if development
             script(type="text/javascript", src="static/js/bundle.js")

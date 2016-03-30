@@ -1,5 +1,6 @@
 module.exports = function (grunt) {
 
+    // load all grunt tasks at once!
     require('load-grunt-tasks')(grunt);
 
     grunt.initConfig({
@@ -100,6 +101,8 @@ module.exports = function (grunt) {
             des: {
                 script: '<%= pkg.main %>',
                 watch: ['<%= appDir %>'],
+                // no need to do a whole server restart for below directories
+                // a simple page refresh would do, using grunt-watch
                 ignore: ['<%= staticDir %>', '<%= viewsDir %>', '<%= prodDir %>', '<%= devDir %>']
             }
         },

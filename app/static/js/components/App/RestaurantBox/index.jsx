@@ -1,6 +1,4 @@
 import React from 'react';
-import RestaurantMap from './RestaurantMap.jsx';
-import RestaurantDetails from './RestaurantDetails.jsx';
 
 export default function RestaurantBox (props) {
     // for restaurant photo
@@ -14,7 +12,12 @@ export default function RestaurantBox (props) {
                 <h3><a href={props.restaurant.url}>{props.restaurant.name}</a></h3>
                 <div className="res-img" style={imgStyle}></div>
 
-                <RestaurantDetails restaurant={props.restaurant} />
+                <ul className="res-details">
+                    <li>Rating: {props.restaurant.user_rating.aggregate_rating}</li>
+                    <li>{props.restaurant.cuisines}</li>
+                    <li>Average cost for 2 - Rs {props.restaurant.average_cost_for_two}/-</li>
+                    <li>Distance : {props.restaurant.location.latitude} {props.restaurant.location.longitude}</li>
+                </ul>
             </div>
             {props.children}
         </div>

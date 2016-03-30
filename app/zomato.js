@@ -110,7 +110,7 @@ module.exports.getNearbyRestaurants = function (latitude, longitude, start) {
     // this would reduce the amount of data sent to client as well
     var responseParams = [
         'name', 
-        'url', 
+        'url',
         'location', 
         'average_cost_for_two', 
         'cuisines', 
