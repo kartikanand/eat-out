@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Loader (props) {
     return (
-        <div className="loader center-block">Loading</div>
+        <div className="loader center-text">Loading</div>
     );
 }
 

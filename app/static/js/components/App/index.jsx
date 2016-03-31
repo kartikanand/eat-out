@@ -107,11 +107,9 @@ export default class App extends React.Component {
             });
         })
         .catch(err => {
-            this.setState({
-                nowShowing: 'error',
-                error: err.message
-            });
+            console.log(err);
         })
+        .done()
     }
 
     getLocateButton () {
