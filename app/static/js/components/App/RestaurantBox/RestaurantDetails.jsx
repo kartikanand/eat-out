@@ -7,6 +7,7 @@ export default function RestaurantDetails (props) {
             <li>{props.restaurant.cuisines}</li>
             <li>Average cost for 2 - Rs {props.restaurant.average_cost_for_two}/-</li>
             <li>Distance : {props.restaurant.location.latitude} {props.restaurant.location.longitude}</li>
+            <li>Address : {props.restaurant.location.address}</li>
         </ul>
     );
 }

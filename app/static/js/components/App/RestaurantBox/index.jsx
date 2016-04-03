@@ -8,7 +8,7 @@ export default function RestaurantBox (props) {
             <div className="float-wrapper center-text">
                 <h3><a href={props.restaurant.url}>{props.restaurant.name}</a></h3>
 
-                <RestaurantMap restaurant={props.restaurant} />
+                <RestaurantMap location={props.restaurant.location} zoom={20} />
                 <RestaurantDetails restaurant={props.restaurant} />
             </div>
             {props.children}
