@@ -7,63 +7,6 @@ import ErrorBox from './ErrorBox.jsx';
 import Loader from './Loader.jsx';
 import RestaurantBox from './RestaurantBox/index.jsx';
 
-// responsible for getting the current location
-// returns a promise
-const getLocation = function () {
-    const defer = q.defer();
-
-    // check if browser supports html5 location api
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-
-            console.log(lat, lon)
-
-            defer.resolve({
-                'lat': lat,
-                'lon': lon
-            });
-        }, function () {
-            // user rejected getting current location
-            defer.reject(new Error('permission error'));
-        });
-    } else {
-        // browser doesn't support html5 location api
-        defer.reject(new Error('location error'));
-    }
-
-    return defer.promise;
-}
-
-// responsible for making request to server with passed options
-// returns a promise
-const makeRequestToServer = function (options) {
-    // no point in continuing with null options
-    if (!options) {
-        q.reject(new Error());
-    }
-    
-    const defer = q.defer();
-
-    // build the url with query params
-    const url = `/search?${querystring.stringify(options)}`;
-
-    // do an ajax request to server
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    xhr.onload = function () {
-        if (xhr.status == 200) {
-            defer.resolve(xhr.responseText);
-        } else {
-            defer.reject(new Error('request error'));
-        }
-    };
-    xhr.send(null);
-
-    return defer.promise;
-}
-
 export default class App extends React.Component {
     constructor (props) {
         super(props);
@@ -73,6 +16,63 @@ export default class App extends React.Component {
             start: 0,
             nowShowing: 'init'
         };
+    }
+
+    // responsible for getting the current location
+    // returns a promise
+    static getLocation () {
+        const defer = q.defer();
+
+        // check if browser supports html5 location api
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                console.log(lat, lon);
+
+                defer.resolve({
+                    'lat': lat,
+                    'lon': lon
+                });
+            }, function () {
+                // user rejected getting current location
+                defer.reject(new Error('permission error'));
+            });
+        } else {
+            // browser doesn't support html5 location api
+            defer.reject(new Error('location error'));
+        }
+
+        return defer.promise;
+    }
+
+    // responsible for making request to server with passed options
+    // returns a promise
+    static makeRequestToServer (options) {
+        // no point in continuing with null options
+        if (!options) {
+            q.reject(new Error());
+        }
+        
+        const defer = q.defer();
+
+        // build the url with query params
+        const url = `/search?${querystring.stringify(options)}`;
+
+        // do an ajax request to server
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.onload = function () {
+            if (xhr.status == 200) {
+                defer.resolve(xhr.responseText);
+            } else {
+                defer.reject(new Error('request error'));
+            }
+        };
+        xhr.send(null);
+
+        return defer.promise;
     }
 
     // returns a promise of JSON.parsed result from server
@@ -85,7 +85,7 @@ export default class App extends React.Component {
         };
 
         // this is effectively returning a promise of "then" result
-        return makeRequestToServer(options).then(JSON.parse);
+        return this.constructor.makeRequestToServer(options).then(JSON.parse);
     }
 
     // should rename this function to something more sensible
@@ -95,8 +95,12 @@ export default class App extends React.Component {
             nowShowing: 'loading'
         });
 
-        getLocation()
+        this.constructor.getLocation()
         .then(location => {
+            this.setState({
+                currentLocation: location
+            });
+
             return this.getRestaurants(location);
         })
         .then(restaurants => {
@@ -109,7 +113,7 @@ export default class App extends React.Component {
         .catch(err => {
             console.log(err);
         })
-        .done()
+        .done();
     }
 
     getLocateButton () {
@@ -137,7 +141,7 @@ export default class App extends React.Component {
         const restaurant = this.getCurrentRestaurant()
 
         return (
-            <RestaurantBox restaurant={restaurant}>
+            <RestaurantBox restaurant={restaurant} currentLocation={this.state.currentLocation}>
                 <button className="center-block" onClick={this.nextRestaurant.bind(this)}>Random!</button>
             </RestaurantBox>
         );
