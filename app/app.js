@@ -43,7 +43,7 @@ app.get('/search', function (req, res) {
         res.sendStatus(400).send('');
     }
 
-    zomato.getNearbyRestaurants(latitude, longitude)
+    zomato.getNearbyRestaurants(latitude, longitude, start)
     .then(function (searchResponse) {
         console.log('sending response');
         res.status(200).send(searchResponse);

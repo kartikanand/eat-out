@@ -14,22 +14,12 @@ html
         else
             link(href="static/css/styles.min.css", rel="stylesheet")
     body
-
         // wrapper for sticky footer at the bottom
         .wrapper
-            header.center-text
-                h1: a(href="/") Eat out!
-                h2 Find random places to eat around you!
-
             // this wrapper will be replaced by restaurants
-            section.react-root.center-text
-                button(type="submit") Locate Me!
+            section#react-root
 
-            // this is for location or request errors
-            .error
-
-            footer.center-text Made with &hearts; in दिल्ली
-
+        script(type="text/javascript", src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtLSm51i41eraOkNmmcZjF3iLv2dwTE_I")
         if development
             script(type="text/javascript", src="static/js/bundle.js")
         else

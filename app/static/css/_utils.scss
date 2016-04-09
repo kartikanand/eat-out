@@ -7,19 +7,3 @@
 .center-text {
     text-align: center;
 }
-
-.pull-right {
-    float: right !important;
-}
-
-.pull-left {
-    float: left !important;
-}
-
-.clearfix {
-    &::after {
-        content: "";
-        display: block;
-        clear: both;
-    }
-}
