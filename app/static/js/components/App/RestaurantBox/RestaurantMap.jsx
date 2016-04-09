@@ -7,7 +7,60 @@ export default class RestaurantMap extends React.Component {
         super(props);
 
         this.state = {
-            zoom: this.props.zoom,
+            center: this.props.center,
+            zoom: this.props.zoom
+        };
+    }
+
+    updateMap () {
+        const map = new google.maps.Map(ReactDOM.findDOMNode(this), {
+            center: this.state.center,
+            zoom: this.state.zoom
+        });
+
+        const marker = new google.maps.Marker({
+            map: map,
+            position: this.state.center,
+        });
+    }
+
+    // React will keep using the same instance for different restaurants
+    // so we call updateMap whenever we recieve new props
+    // this will happen on render of a newer restaurant
+    componentWillReceiveProps(props) {
+        this.setState({
+            center: props.center,
+            zoom: props.zoom
+        });
+
+        this.updateMap();
+    }
+
+    // initial render for map
+    componentDidMount () {
+        this.updateMap();
+    }
+
+    // we never need to re-render the div element
+    // only call updateMap routine on newer props
+    shouldComponentUpdate () {
+        return false;
+    }
+
+    render () {
+        return <div className="res-map"></div>;    
+    }
+}
+
+export default class RestaurantMapContainer extends React.Component {
+    constructor (props) {
+        super(props);
+
+        this.state = {
+            loadingMap: true,
+            loadingDistance: true,
+            distance: null,
+            map: null,
             location: this.props.location,
             currentLocation: this.props.currentLocation
         };
@@ -23,7 +76,11 @@ export default class RestaurantMap extends React.Component {
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({'address': address}, function (data, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-                defer.resolve(data[0].geometry.location);
+                try {
+                    defer.resolve(data[0].geometry.location);
+                } catch (e) {
+                    defer.reject(e);
+                }
             } else {
                 defer.reject(new Error('google maps error'));
             }
@@ -32,6 +89,7 @@ export default class RestaurantMap extends React.Component {
         return defer.promise;
     }
 
+    // get distance using google javascript Distance Matrix service
     static getDistance (origin, destination) {
         var distanceMatrixService = new google.maps.DistanceMatrixService();
 
@@ -42,7 +100,11 @@ export default class RestaurantMap extends React.Component {
             travelMode: google.maps.TravelMode.DRIVING,
         }, function (response, status) {
             if (status === google.maps.DistanceMatrixStatus.OK) {
-                defer.resolve(response.rows[0].elements[0].distance.text);
+                try {
+                    defer.resolve(response.rows[0].elements[0].distance.text);
+                } catch (e) {
+                    defer.reject(e);
+                }
             } else {
                 defer.reject(new Error('distanceMatrixService error'));
             }
@@ -51,49 +113,30 @@ export default class RestaurantMap extends React.Component {
         return defer.promise;
     }
 
-    // get center in googleLatLng format
-    static getCenter (latitude, longitude, address) {
-        // Zomato doesn't always return location
-        if (parseFloat(latitude) && parseFloat(longitude)) {
-            return q.resolve(new google.maps.LatLng(latitude, longitude));
-        } else {
-            return RestaurantMap.getLatLngFromAddress(address);
-        }
-    }
-
     static getLocationGoogleFormat(latitude, longitude) {
         return new google.maps.LatLng(latitude, longitude);
     }
 
-    updateMap () {
+    // get center in googleLatLng format
+    static getCenter (latitude, longitude, address) {
+        // Zomato doesn't always return location
+        if (parseFloat(latitude) && parseFloat(longitude)) {
+            return q.resolve(RestaurantMapContainer.getLocationGoogleFormat(latitude, longitude));
+        } else {
+            return RestaurantMapContainer.getLatLngFromAddress(address);
+        }
+    }
+
+    renderMap () {
         const latitude = this.state.location.latitude;
         const longitude = this.state.location.longitude;
         const address = this.state.location.address;
 
         this.constructor.getCenter(latitude, longitude, address)
         .then(data => {
-            const map = new google.maps.Map(ReactDOM.findDOMNode(this), {
+            this.setState({
                 center: data,
-                zoom: this.state.zoom
-            });
-
-            // save map to state so that we can access it later
-            this.setState({
-                map: map
-            });
-
-            return data;
-        })
-        .then(data => {
-            const marker = new google.maps.Marker({
-                map: this.state.map,
-                position: data,
-            });
-
-            // sadly we cannot get marker from google map :/
-            // storing it for future use
-            this.setState({
-                mapMarker: marker
+                loadingMap: false
             });
 
             return data;
@@ -102,7 +145,10 @@ export default class RestaurantMap extends React.Component {
             return this.constructor.getDistance(data, this.constructor.getLocationGoogleFormat(this.state.currentLocation.lat, this.state.currentLocation.lon));
         })
         .then(data => {
-            this.state.mapMarker.setTitle(data);
+            this.setState({
+                loadingDistance: false,
+                distance: data
+            });
         })
         .catch(function (err) {
             console.log(err);
@@ -110,22 +156,49 @@ export default class RestaurantMap extends React.Component {
         .done();
     }
 
-    componentWillReceiveProps(props) {
-        this.setState({
-            zoom: props.zoom,
-            location: props.location
-        });
+    getDistanceBox () {
+        if (this.state.loadingDistance) return <ul><li>Getting distance!</li></ul>
 
-        this.updateMap();
+        return <ul><li>{this.state.distance}</li></ul>
+    }
+
+    getMapBox () {
+        if (this.state.loadingMap) return <div>Loading Map</div>
+
+        return <RestaurantMap center={this.state.center} zoom={15} />;
     }
 
     componentDidMount () {
-        this.updateMap();
+        this.renderMap();
+    }
+
+    // React will keep using the same instance for different restaurants
+    // so we call renderMap whenever we recieve new props
+    // this will happen on render of a newer restaurant
+    componentWillReceiveProps(props) {
+        // reset map, distance
+        // update with new props
+        this.setState({
+            loadingMap: true,
+            loadingDistance: true,
+            distance: null,
+            map: null,
+            location: props.location,
+            currentLocation: props.currentLocation
+        });
+
+        this.renderMap();
     }
 
     render () {
+        const mapBox = this.getMapBox();
+        const distanceBox = this.getDistanceBox();
+
         return (
-            <div className="res-map"></div>
+            <div>
+                {mapBox}
+                {distanceBox}
+            </div>
         );
     }
 }
