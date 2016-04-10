@@ -6,6 +6,7 @@ import Footer from './Footer.jsx';
 import ErrorBox from './ErrorBox.jsx';
 import Loader from './Loader.jsx';
 import RestaurantBox from './RestaurantBox/index.jsx';
+import Icon from './Icon.jsx';
 
 export default class App extends React.Component {
     constructor (props) {
@@ -90,7 +91,9 @@ export default class App extends React.Component {
 
     // should rename this function to something more sensible
     // this is actually doing a lot of things
-    handleLocateMe () {
+    handleLocateMe (ev) {
+        ev.preventDefault();
+
         this.setState({
             nowShowing: 'loading'
         });
@@ -118,7 +121,10 @@ export default class App extends React.Component {
 
     getLocateButton () {
         return (
-            <button className="center-block" onClick={this.handleLocateMe.bind(this)}>Locate Me!</button>
+            <button className="center-block" onClick={this.handleLocateMe.bind(this)}>
+                Locate Me&nbsp;
+                <Icon icon="compass" btn={true} />
+            </button>
         );
     }
 
@@ -138,12 +144,21 @@ export default class App extends React.Component {
     }
 
     displayrestaurant () {
-        const restaurant = this.getCurrentRestaurant()
+        const restaurant = this.getCurrentRestaurant();
+
+        // Don't render random button on last restaurant
+        const randomButton = this.state.counter < this.state.restaurants.length-1 ? 
+            <button className="center-block" onClick={this.nextRestaurant.bind(this)}>
+                Random&nbsp;
+                <Icon icon="shuffle" btn={true} />
+            </button> : null;
 
         return (
-            <RestaurantBox restaurant={restaurant} currentLocation={this.state.currentLocation}>
-                <button className="center-block" onClick={this.nextRestaurant.bind(this)}>Random!</button>
-            </RestaurantBox>
+            <div>
+                <RestaurantBox restaurant={restaurant} currentLocation={this.state.currentLocation}>
+                </RestaurantBox>
+                {randomButton}
+            </div>
         );
     }
 

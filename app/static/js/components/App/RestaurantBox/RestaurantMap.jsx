@@ -1,6 +1,7 @@
 import q from 'q';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Icon from '../Icon.jsx';
 
 export default class RestaurantMap extends React.Component {
     constructor (props) {
@@ -157,13 +158,25 @@ export default class RestaurantMapContainer extends React.Component {
     }
 
     getDistanceBox () {
-        if (this.state.loadingDistance) return <ul><li>Getting distance!</li></ul>
+        if (this.state.loadingDistance) return (
+            <ul>
+                <li>
+                    <Icon icon="compass" />&nbsp;<span>Getting distance!</span>
+                </li>
+            </ul>
+        );
 
-        return <ul><li>{this.state.distance}</li></ul>
+        return (
+            <ul>
+                <li>
+                    <Icon icon="compass" />&nbsp;<span>{this.state.distance}</span>
+                </li>
+            </ul>
+        );
     }
 
     getMapBox () {
-        if (this.state.loadingMap) return <div>Loading Map</div>
+        if (this.state.loadingMap) return <div className="res-map">Loading Map</div>;
 
         return <RestaurantMap center={this.state.center} zoom={15} />;
     }
