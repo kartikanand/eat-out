@@ -11,6 +11,8 @@ How to Build
 - Clone the repository using `git`
 - Get a zomato developer key from [Zomato Developer API](https://developers.zomato.com/api#headline2)
 - export the zomato developer key as `ZOMATO_KEY` variable
+- Get a Google JavaScript API developer key
+- export it as `MAP_KEY` variable
 - For running development version of the site which first builds then starts a nodemon and watch server, run: `grunt`
 - For building production (minified and uglified assets) do: `grunt build`, export `NODE_ENV` to production, and start the server 
 yourself using `npm start`
