@@ -6,7 +6,7 @@
   "description": "Find a random place to eat around you. Static, no build step.",
   "scripts": {
     "start": "python3 -m http.server 8080",
-    "test": "node --test test/"
+    "test": "node --test"
   },
   "license": "MIT"
 }
