@@ -1,4 +1,5 @@
-import { formatDistance, getPosition } from './geo.js';
+import { getPosition } from './geo.js';
+import { formatDistance, radiusOptions, usesMiles } from './units.js';
 import { findPlaces } from './places.js';
 import { shuffle } from './random.js';
 
@@ -16,7 +17,14 @@ const els = {
   radius: $('radius'),
 };
 
+const imperial = usesMiles();
 let queue = [];
+
+// default to the middle option (1.5 km or 1 mile)
+const options = radiusOptions({ imperial });
+els.radius.replaceChildren(
+  ...options.map(({ metres, label }, i) => new Option(label, String(metres), false, i === 2)),
+);
 
 function setStatus(message) {
   els.status.textContent = message;
@@ -37,7 +45,7 @@ function show(place) {
 
   const li = (text) => Object.assign(document.createElement('li'), { textContent: text });
   els.chips.replaceChildren(
-    ...[place.kind?.replaceAll('_', ' '), ...place.cuisines, `${formatDistance(place.distance)} away`]
+    ...[place.kind?.replaceAll('_', ' '), ...place.cuisines, `${formatDistance(place.distance, { imperial })} away`]
       .filter(Boolean)
       .map(li),
   );

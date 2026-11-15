@@ -11,13 +11,6 @@ export function haversine(lat1, lon1, lat2, lon2) {
   return 2 * EARTH_RADIUS_M * Math.asin(Math.sqrt(a));
 }
 
-/** "450 m" under 1 km, otherwise "1.3 km". */
-export function formatDistance(metres) {
-  return metres < 1000
-    ? `${Math.round(metres / 10) * 10} m`
-    : `${(metres / 1000).toFixed(1)} km`;
-}
-
 /** Promise wrapper around the Geolocation API. */
 export function getPosition(options = { enableHighAccuracy: false, timeout: 10_000 }) {
   return new Promise((resolve, reject) => {
