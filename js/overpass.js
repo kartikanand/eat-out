@@ -2,14 +2,17 @@ import { haversine } from './geo.js';
 
 export const ENDPOINTS = [
   'https://overpass-api.de/api/interpreter',
-  'https://overpass.kumi.systems/api/interpreter',
+  'https://overpass.private.coffee/api/interpreter',
+  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
 ];
 
-const AMENITIES = 'restaurant|cafe|fast_food';
+const AMENITIES = ['restaurant', 'cafe', 'fast_food'];
 const CACHE_TTL_MS = 10 * 60 * 1000;
 
 export function buildQuery(lat, lon, radius) {
-  return `[out:json][timeout:25];nwr["amenity"~"^(${AMENITIES})$"]["name"](around:${radius},${lat},${lon});out center tags 200;`;
+  // exact-match filters are much cheaper for Overpass than a regex
+  const parts = AMENITIES.map((a) => `nwr["amenity"="${a}"]["name"](around:${radius},${lat},${lon});`);
+  return `[out:json][timeout:20];(${parts.join('')});out center tags 200;`;
 }
 
 /** Only allow http(s) links; OSM data is user-contributed and untrusted. */
@@ -63,11 +66,22 @@ async function post(endpoint, query, signal) {
     body: new URLSearchParams({ data: query }),
     signal,
   });
-  if (!res.ok) throw new Error(`Overpass responded ${res.status}`);
+  if (!res.ok) throw new Error(`${new URL(endpoint).host} responded ${res.status}`);
   return res.json();
 }
 
-function readCache(key) {
+/** Query every mirror at once and use the first to answer; abort the rest. */
+async function raceEndpoints(query, timeoutMs) {
+  const controller = new AbortController();
+  const signal = AbortSignal.any([controller.signal, AbortSignal.timeout(timeoutMs)]);
+  try {
+    return await Promise.any(ENDPOINTS.map((endpoint) => post(endpoint, query, signal)));
+  } finally {
+    controller.abort();
+  }
+}
+
+export function readCache(key) {
   try {
     const hit = JSON.parse(sessionStorage.getItem(key));
     return hit && Date.now() - hit.at < CACHE_TTL_MS ? hit.data : null;
@@ -76,7 +90,7 @@ function readCache(key) {
   }
 }
 
-function writeCache(key, data) {
+export function writeCache(key, data) {
   try {
     sessionStorage.setItem(key, JSON.stringify({ at: Date.now(), data }));
   } catch {
@@ -84,23 +98,8 @@ function writeCache(key, data) {
   }
 }
 
-/** Fetch nearby restaurants, trying each mirror in turn. */
-export async function fetchRestaurants(origin, radius = 1500, { timeoutMs = 20_000 } = {}) {
-  // ~100 m grid so small GPS jitter still hits the cache
-  const key = `eatout:${origin.lat.toFixed(3)},${origin.lon.toFixed(3)},${radius}`;
-  const cached = readCache(key);
-  if (cached) return parseElements(cached, origin);
-
-  const query = buildQuery(origin.lat, origin.lon, radius);
-  let lastError;
-  for (const endpoint of ENDPOINTS) {
-    try {
-      const json = await post(endpoint, query, AbortSignal.timeout(timeoutMs));
-      writeCache(key, json);
-      return parseElements(json, origin);
-    } catch (err) {
-      lastError = err;
-    }
-  }
-  throw new Error(`Could not load restaurants (${lastError?.message ?? 'unknown error'}).`);
+/** Fetch from whichever Overpass mirror answers first. Throws if none do. */
+export async function fetchFromOverpass(origin, radius, { timeoutMs = 8_000 } = {}) {
+  const json = await raceEndpoints(buildQuery(origin.lat, origin.lon, radius), timeoutMs);
+  return parseElements(json, origin);
 }
