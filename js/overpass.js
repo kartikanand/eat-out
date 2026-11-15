@@ -1,9 +1,10 @@
 import { haversine } from './geo.js';
 
+// Keyless public instances from https://wiki.openstreetmap.org/wiki/Overpass_API#Public_Overpass_API_instances
+// Each one sees the user's approximate location, so only add mirrors you are happy to send that to.
 export const ENDPOINTS = [
   'https://overpass-api.de/api/interpreter',
   'https://overpass.private.coffee/api/interpreter',
-  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
 ];
 
 const AMENITIES = ['restaurant', 'cafe', 'fast_food'];
