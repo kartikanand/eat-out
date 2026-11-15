@@ -1,5 +1,5 @@
 import { formatDistance, getPosition } from './geo.js';
-import { fetchRestaurants } from './overpass.js';
+import { findPlaces } from './places.js';
 import { shuffle } from './random.js';
 
 const $ = (id) => document.getElementById(id);
@@ -9,7 +9,9 @@ const els = {
   status: $('status'),
   card: $('card'),
   name: $('name'),
-  meta: $('meta'),
+  chips: $('chips'),
+  details: $('details'),
+  form: $('form'),
   links: $('links'),
   radius: $('radius'),
 };
@@ -33,16 +35,16 @@ function link(href, text) {
 function show(place) {
   els.name.textContent = place.name;
 
-  const bits = [
-    place.kind?.replaceAll('_', ' '),
-    ...place.cuisines,
-    `${formatDistance(place.distance)} away`,
-    place.address,
-    place.openingHours && `Hours: ${place.openingHours}`,
-    place.phone && `Phone: ${place.phone}`,
-  ].filter(Boolean);
-  els.meta.replaceChildren(
-    ...bits.map((text) => Object.assign(document.createElement('li'), { textContent: text })),
+  const li = (text) => Object.assign(document.createElement('li'), { textContent: text });
+  els.chips.replaceChildren(
+    ...[place.kind?.replaceAll('_', ' '), ...place.cuisines, `${formatDistance(place.distance)} away`]
+      .filter(Boolean)
+      .map(li),
+  );
+  els.details.replaceChildren(
+    ...[place.address, place.openingHours && `Hours: ${place.openingHours}`, place.phone && `Phone: ${place.phone}`]
+      .filter(Boolean)
+      .map(li),
   );
 
   const links = [
@@ -69,7 +71,7 @@ async function start() {
     setStatus('Finding your location…');
     const origin = await getPosition();
     setStatus('Looking for places nearby…');
-    const places = await fetchRestaurants(origin, Number(els.radius.value));
+    const places = await findPlaces(origin, Number(els.radius.value));
     if (places.length === 0) {
       setStatus('No restaurants found nearby. Try a larger radius.');
       return;
@@ -84,5 +86,8 @@ async function start() {
   }
 }
 
-els.start.addEventListener('click', start);
+els.form.addEventListener('submit', (ev) => {
+  ev.preventDefault();
+  start();
+});
 els.again.addEventListener('click', next);
