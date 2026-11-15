@@ -26,9 +26,13 @@ els.radius.replaceChildren(
   ...options.map(({ metres, label }, i) => new Option(label, String(metres), false, i === 2)),
 );
 
-function setStatus(message) {
-  els.status.textContent = message;
+function setStatus(message, { loading = false } = {}) {
+  els.status.replaceChildren(
+    ...(loading ? [Object.assign(document.createElement('span'), { className: 'spinner', ariaHidden: 'true' })] : []),
+    document.createTextNode(message),
+  );
   els.status.hidden = !message;
+  els.status.classList.toggle('loading', loading);
 }
 
 function link(href, text) {
@@ -73,12 +77,14 @@ function next() {
 
 async function start() {
   els.start.disabled = true;
+  els.start.textContent = 'Searching…';
+  els.form.setAttribute('aria-busy', 'true');
   els.card.hidden = true;
   els.again.hidden = true;
   try {
-    setStatus('Finding your location…');
+    setStatus('Finding your location…', { loading: true });
     const origin = await getPosition();
-    setStatus('Looking for places nearby…');
+    setStatus('Looking for places nearby…', { loading: true });
     const places = await findPlaces(origin, Number(els.radius.value));
     if (places.length === 0) {
       setStatus('No restaurants found nearby. Try a larger radius.');
@@ -91,6 +97,8 @@ async function start() {
     setStatus(err.message);
   } finally {
     els.start.disabled = false;
+    els.start.textContent = 'Find food near me';
+    els.form.removeAttribute('aria-busy');
   }
 }
 
