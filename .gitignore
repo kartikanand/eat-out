@@ -1,6 +1,2 @@
 node_modules/
-.reboot
-.sass-cache/
 .env
-app/public
-app/dev

@@ -1,0 +1,64 @@
+@layer reset, base;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; }
+  body, h1, h2, p, ul { margin: 0; }
+  ul { padding: 0; list-style: none; }
+}
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+    --bg: light-dark(#fffaf3, #1b1713);
+    --fg: light-dark(#2b2118, #f3e9dc);
+    --card: light-dark(#fff, #26201a);
+    --accent: light-dark(#d9480f, #ff8a50);
+    font-family: system-ui, sans-serif;
+  }
+
+  body {
+    min-block-size: 100dvh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.5;
+  }
+
+  main {
+    inline-size: min(36rem, 100% - 2rem);
+    margin-inline: auto;
+    padding-block: 2rem;
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  h1 { font-size: clamp(2rem, 6vw, 3rem); color: var(--accent); }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+
+  button, select {
+    font: inherit;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--accent);
+  }
+  button { background: var(--accent); color: var(--bg); cursor: pointer; }
+  button:disabled { opacity: 0.6; cursor: progress; }
+  button:focus-visible, a:focus-visible, select:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
+  select { background: var(--card); color: var(--fg); }
+
+  article {
+    background: var(--card);
+    padding: 1.25rem;
+    border-radius: 1rem;
+    display: grid;
+    gap: 0.75rem;
+    & li::first-letter { text-transform: uppercase; }
+  }
+  #links { display: flex; gap: 1rem; }
+  a { color: var(--accent); }
+  [hidden] { display: none !important; }
+  footer { padding: 1rem; text-align: center; font-size: 0.85rem; }
+}
