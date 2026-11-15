@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://overpass-api.de https://overpass.kumi.systems; base-uri 'none'; form-action 'none'"
+    />
+    <title>Eat Out</title>
+    <meta name="description" content="Find a random place to eat around you." />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script type="module" src="js/main.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>Eat Out</h1>
+      <p>Can't decide where to eat? Let's pick for you.</p>
+
+      <div class="controls">
+        <label>
+          Within
+          <select id="radius">
+            <option value="500">500 m</option>
+            <option value="1000">1 km</option>
+            <option value="1500" selected>1.5 km</option>
+            <option value="3000">3 km</option>
+            <option value="5000">5 km</option>
+          </select>
+        </label>
+        <button id="start" type="button">Find food near me</button>
+      </div>
+
+      <p id="status" role="status" aria-live="polite" hidden></p>
+
+      <article id="card" hidden>
+        <h2 id="name"></h2>
+        <ul id="meta"></ul>
+        <p id="links"></p>
+      </article>
+      <button id="again" type="button" hidden>Pick another</button>
+    </main>
+    <footer>
+      Data © <a href="https://www.openstreetmap.org/copyright" rel="noopener noreferrer">OpenStreetMap contributors</a>
+    </footer>
+  </body>
+</html>
