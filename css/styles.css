@@ -18,6 +18,7 @@
     --accent: light-dark(#c2410c, #ff8a50);
     --on-accent: light-dark(#fff, #1b0f08);
     --radius: 0.75rem;
+    --control-h: 3rem;
     font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   }
 
@@ -82,7 +83,8 @@
   select {
     appearance: none;
     inline-size: 100%;
-    padding: 0.7rem 2.5rem 0.7rem 0.9rem;
+    block-size: var(--control-h);
+    padding: 0 2.5rem 0 0.9rem;
     background: var(--bg);
     color: var(--fg);
     border: 1px solid var(--line);
@@ -92,7 +94,8 @@
   }
 
   button {
-    padding: 0.8rem 1.25rem;
+    block-size: var(--control-h);
+    padding: 0 1.25rem;
     border-radius: var(--radius);
     border: 1px solid transparent;
     font-weight: 600;
@@ -105,6 +108,9 @@
   .secondary { background: transparent; color: var(--accent); border-color: var(--accent); }
 
   #status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     padding: 0.75rem 1rem;
     border-radius: var(--radius);
     background: var(--card);
@@ -112,8 +118,12 @@
     color: var(--muted);
   }
 
+  /* fixed height so "Pick another" stays put whatever the content length */
   article {
     display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    block-size: 17rem;
+    overflow: hidden;
     gap: 0.9rem;
     padding: 1.25rem;
     background: var(--card);
@@ -121,20 +131,57 @@
     border-radius: calc(var(--radius) + 0.25rem);
     box-shadow: 0 6px 20px -12px light-dark(rgb(80 40 10 / 0.35), rgb(0 0 0 / 0.6));
   }
-  h2 { font-size: 1.5rem; line-height: 1.2; overflow-wrap: anywhere; }
+  h2 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
 
-  .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .chips { display: flex; gap: 0.4rem; overflow: hidden; }
   .chips li {
     padding: 0.15rem 0.7rem;
     border-radius: 999px;
     font-size: 0.85rem;
+    flex-shrink: 0;
     background: color-mix(in srgb, var(--accent) 14%, transparent);
     color: var(--accent);
     &::first-letter { text-transform: uppercase; }
   }
 
-  .details { display: grid; gap: 0.25rem; color: var(--muted); font-size: 0.95rem; overflow-wrap: anywhere; }
+  .details {
+    display: grid;
+    align-content: start;
+    gap: 0.25rem;
+    overflow: hidden;
+    color: var(--muted);
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+    & li {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
+    }
+  }
   .links { display: flex; flex-wrap: wrap; gap: 1.25rem; font-weight: 600; }
+
+  .spinner {
+    flex: none;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    border: 3px solid color-mix(in srgb, var(--accent) 25%, transparent);
+    border-block-start-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { rotate: 360deg; } }
+  @keyframes pulse { 50% { opacity: 0.35; } }
 
   @media (min-width: 30rem) {
     .controls { grid-template-columns: 1fr auto; align-items: end; }
@@ -142,5 +189,6 @@
 
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
+    .spinner { animation: pulse 1.6s ease-in-out infinite; border-radius: 50%; border-color: var(--accent); }
   }
 }
